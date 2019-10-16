@@ -1,0 +1,159 @@
+OCSJ使用方法
+
+【1.通達メールの文字化け回避方法】
+多くのメーラではメールをeml形式で保存していますが、
+UCMはeml形式に対応しておらず、そのまま開くと文字化けが発生します。
+
+このため、通達メールをHTML形式で保存してUCMにアップロードするという手段を取っていますが、
+通達メールの文字コードによってはHTML形式でも文字化けが発生します。
+
+受信したメールのヘッダを確認し、Content－Typeがmultipart/alternativeに設定されていた場合は
+下記の手順で通達メールを再受信してください。
+
+<<通達メール再受信手順>>
+①通達メール送信時に【HTML形式で送信】または【txt形式で送信】を選択
+　※【HTML/txt形式で送信】を選択するとUCM更新時に文字化けが発生します
+②自分宛に送信⇒受信
+
+受信したメールは下記の手順でHTML形式ファイルとして保存した上でUCMに更新して下さい。
+
+<<HTMLファイル編集手順>>
+Thunderbirdで保存したHTMLファイルをViViなどで編集する際に
+ViVi上で「EUC」としてファイルがオープンすることがあります。
+こうした場合には「新規作成」を行ってもとのファイルの内容をコピー＆ペーストすることで
+ファイルの文字コードを「SJIS」に変更することが可能です。
+
+<<通達メール更新手順>>
+①Thunderbirdのファイル⇒名前を付けて保存⇒『ファイル』を選択
+②保存形式にHTMLを選択した状態で保存
+③保存したHTML形式のファイルをUCM(Content Server)に更新する
+
+
+
+【2.External URLについて】
+UCM上でページを作成する際に階層構造を維持できずに矛盾が生じることがあります。
+
+<例：矛盾した階層構造>
+Bid and Project(Procedure)配下の契約1、2、3を作成したいが
+契約ページにはTOPとなるページが存在しないため
+契約1が契約2および3の親階層となっている。
+●Bid and Project(Procedure)
+　　　  |----契約1
+    　　　     |----契約2
+      　  　　 |----契約3
+
+階層構造の矛盾を解決するためにExternal URLを使用しています。
+ExternalURLを指定したURLが入力されると、
+該当するページではなく指定したページにジャンプする仕組みになっています。
+
+<例：External URLを使用した階層構造>
+Bid and Project(Procedure)配下に契約ページを、
+契約ページの配下に契約1、2、3を作成する。
+契約ページはExternalURLを指定して契約1にジャンプするようにしているため、
+TOPページが存在しなくても階層構造に矛盾が生じない。
+●Bid and Project(Procedure)
+　　　  |----契約(External URLに契約1を指定⇒契約1が表示される)
+    　　　     |----契約1
+    　　　     |----契約2
+      　  　　 |----契約3
+
+なお、このExternal URLは
+　・契約ページ(Bid and Project(Procedure))
+　・Standardizationページ(Offshore)
+などのページで使用されています。
+
+
+
+【3.HOMEとTOPについて】
+Offshoreページなどの上タブには
+HOMEとTOP(Offshoreの場合はOffshore TOP)が存在します。
+HOMEとTOPの役割はそれぞれ下記のようになっています。
+
+　HOME：現在いるセクションの親ページへのリンク
+　TOP ：セクションのTOPページへのリンク
+
+<例：Offshoreページ>
+下記のような階層構造を持つ
+Offshoreセクション内のOffshore TOPページにいるとします。
+
+●OCSJ Internal TOP
+　　　  |----Offshore TOP
+    　　　     |----Standardization
+    　　　     |----EBS Factory Model
+      　  　　 |----FAQ
+      　  　　 |----Case Study
+      　  　　 |----Link
+
+このとき、上タブに表示されるリンクとリンク先は下記の通りです。
+
+[HOME][OffshoreTOP][Standardization][EBSFactoryModel][FAQ][CaseStudy][Link]
+  |     |----→Offshore TOPへリンク
+  |----→OCSJ Internal TOPへリンク
+
+HOMEとTOPが同時に表示されるのは
+　・Offshore
+　・Bid and Project(Procedure)
+などのページです。
+
+
+
+【4.アカウント構成について】
+UCM内OCSJのページには「EMPL系アカウント」と
+「JAPAN系アカウント」が設定されています。
+
+　・EMPL系 ：全社公開用のアカウント
+　・JAPAN/OCSJ系：コンサル専用のアカウント
+
+EMPL系アカウントは、Globalでメンテナンスされます。
+JAPAN/OCSJ系アカウントは、OCSJ独自に作成したアカウントなので、メンテナンスはOCSJで行います。
+
+<<OCSJ系Accountについて>>
+EMPL系には下記のAccountがあります。
+===========================
+EMPL/JAPAN/OCSJ - RWDA   ・・EMPL/JAPAN/OCSJエリア編集者
+===========================
+
+<<JAPAN系Accountについて>>
+JAPAN系には下記のAccountがあります。以下のメンバーを設定してください。
+===========================
+JAPAN/OCSJ/ALL - R        ・・JAPAN/OCSJエリア参照者、OCSJメンバ全員
+JAPAN/OCSJ/ALL/ADM - RW   ・・JAPAN/OCSJエリア編集者
+JAPAN/OCSJLM/ALL - R      ・・JAPAN/OCSJLMエリア参照者、LMメンバ
+JAPAN/OCSJLM/ALL/ADM - RW ・・JAPAN/OCSJLMエリア編集者
+JAPAN/OCSJCMC/ALL - R 　　・・JAPAN/OCSJCMCエリア参照者、CMCメンバ
+JAPAN/OCSJCMC/ALL/ADM -RW ・・JAPAN/OCSJCMCエリア編集者
+===========================
+
+SecurityGroup=Public,Account=EMPL系 を指定すると、全社公開となり、ユーザはログインせずにページ参照が可能です。
+SecurityGroup=Secure,Account=JAPAN/OCSJ系 を指定すると、OCSJ内公開となり、事前に登録したユーザがログインしたときのみページ参照が可能です。
+
+OCSJでは、OCSJのTOPページのみJAPAN系を設定しており、他部署の方も見ることができるようになっています。
+OCSJ Internal TOP以下のページに対してはJAPAN系のアカウントが設定されており、
+コンサルメンバーのみが参照可能となっています。
+
+上記の理由から、UCMにコンテンツを登録、あるいはページを作成する場合は
+各コンテンツに下記のアカウントを設定して下さい。
+
+<<Site,Region,Fileへのアカウント設定値>>
+社内公開の場合：　EMPL/JAPAN/OCSJを設定
+OCSJ内公開の場合：JAPAN/OCSJ/ALLを設定
+LM内公開の場合：　JAPAN/OCSJLM/ALLを設定
+CMC内公開の場合： JAPAN/OCSJCMC/ALLを設定
+
+
+
+【5.HTMLファイル内からUCMコンテンツへのリンク】
+HTMLファイルなどの中にUCMコンテンツへのリンクを貼る際には
+「native」リンクを使用してください。
+※「native」リンク：「http://my.oracle.com/content/native/cnt●●●●●●」で指定
+※「native」リンクの他に、「アカウント指定」リンク方法があります。
+※「アカウント指定」リンク方法：「http://content.oracle.com/content/groups/secure/@japan/@ocsj/@cmc/documents/webcontent/cnt●●●●●●.ppt」
+
+コンテンツのアカウント情報を変更すると直接リンクの「/@empl/@japan/@ocsj/@all」部分が変更されるため、リンクエラーが発生します。
+このため、HTMLファイルなどからUCMコンテンツにリンクを貼る際には「native」リンクを使用してください。
+
+なお、UCMページ上で「/@empl/@japan/@ocsj/@all」リンクを使用し、アカウントを変更しても、
+UCMが自動でリンクのアカウント部分を修正するためリンクエラーは発生しません。
+
+
+
